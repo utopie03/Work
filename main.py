@@ -1,5 +1,6 @@
 from keras.layers import Input, Dense, Flatten, Dropout, Activation
-from keras.layers.normalization import BatchNormalization
+# from keras.layers.normalization import BatchNormalization
+from keras.layers.normalization.batch_normalization_v1 import BatchNormalization
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import TensorBoard
 from keras.preprocessing import image
@@ -10,7 +11,8 @@ import glob, os, cv2, random, time
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Conv2D, Flatten, MaxPooling2D, Dense
-from keras.optimizers import SGD
+# from keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD
 from keras.applications.vgg16 import VGG16
 
 
@@ -81,7 +83,7 @@ def model(train_generator, validation_generator, save_model_path):
     model.add(top_model)
     # 编译模型, 采用 compile 函数: https://keras.io/models/model/#compile
     model.compile(
-        # 是优化器, 主要有Adam、sgd、rmsprop等方式。
+        # 优化器, 主要有Adam、sgd、rmsprop等方式。
         optimizer=SGD(lr=1e-3, momentum=0.9),
         # 损失函数,多分类采用 categorical_crossentropy
         loss='categorical_crossentropy',
@@ -92,7 +94,7 @@ def model(train_generator, validation_generator, save_model_path):
         # 一个生成器或 Sequence 对象的实例
         generator=train_generator,
         # epochs: 整数，数据的迭代总轮数。
-        epochs=200,
+        epochs=100,
         # 一个epoch包含的步数,通常应该等于你的数据集的样本数量除以批量大小。
         steps_per_epoch=2259 // 16,
         # 验证集
